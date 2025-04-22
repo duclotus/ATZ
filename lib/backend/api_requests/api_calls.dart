@@ -20,21 +20,21 @@ class PushNotificationCall {
 {
   "target_channel": "push",
   "contents": {
-    "en": "$contentEn"
+    "en": "${contentEn}"
   },
   "headings": {
-    "en": "$headingEn"
+    "en": "${headingEn}"
   },
   "subtitle": {
-    "en": "$subtitleEn"
+    "en": "${subtitleEn}"
   },
-  "app_id": "$appId",
+  "app_id": "${appId}",
   "include_aliases": {
     "external_id": [
-      "$externalId"
+      "${externalId}"
     ]
   },
-  "send_after": "$sendAfter"
+  "send_after": "${sendAfter}"
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'PushNotification',
@@ -44,7 +44,59 @@ class PushNotificationCall {
         'accept': 'application/json',
         'content-type': 'application/json',
         'Authorization':
-            'Basic MzgzZGYzZDEtMGU0MS00YzA3LTlkNDUtNmJiOGI3NThjZWZk',
+            'os_v2_app_ysuqprtcffdntmnmwox2joc6rsld3krbwl5efzvak6mxidngfelguodfay3nw33w6jg36we5tpesbmelt3v426hgqmabqzm3u5xjfeq',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      isStreamingApi: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class OnesignalNotificationCall {
+  static Future<ApiCallResponse> call({
+    String? contentEn = '',
+    String? headingEn = '',
+    String? appId = '',
+    String? externalId = '',
+    String? sendAfter = '',
+    String? subtitleEn = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "target_channel": "push",
+  "contents": {
+    "en": "${escapeStringForJson(contentEn)}"
+  },
+  "headings": {
+    "en": "${escapeStringForJson(headingEn)}"
+  },
+  "subtitle": {
+    "en": "${escapeStringForJson(subtitleEn)}"
+  },
+  "app_id": "${escapeStringForJson(appId)}",
+  "include_aliases": {
+    "external_id": [
+      "${escapeStringForJson(externalId)}"
+    ]
+  },
+  "send_after": "${escapeStringForJson(sendAfter)}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'OnesignalNotification',
+      apiUrl: 'https://api.onesignal.com/notifications?c=push',
+      callType: ApiCallType.POST,
+      headers: {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'Authorization':
+            'os_v2_app_ysuqprtcffdntmnmwox2joc6rtb3izmoibyupcvxx5m6ub36lgj7mfwplrmpzgs54jlmweob3xks5fdr4f6asg6p2xkezi5az7a5u6i',
       },
       params: {},
       body: ffApiRequestBody,
@@ -101,4 +153,15 @@ String _serializeJson(dynamic jsonVar, [bool isList = false]) {
     }
     return isList ? '[]' : '{}';
   }
+}
+
+String? escapeStringForJson(String? input) {
+  if (input == null) {
+    return null;
+  }
+  return input
+      .replaceAll('\\', '\\\\')
+      .replaceAll('"', '\\"')
+      .replaceAll('\n', '\\n')
+      .replaceAll('\t', '\\t');
 }

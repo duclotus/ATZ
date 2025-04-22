@@ -3,6 +3,13 @@ import 'home_page_widget.dart' show HomePageWidget;
 import 'package:flutter/material.dart';
 
 class HomePageModel extends FlutterFlowModel<HomePageWidget> {
+  ///  State fields for stateful widgets in this page.
+
+  // Stores action output result for [Custom Action - initPaymentSheet] action in Button widget.
+  String? messageInit;
+  // Stores action output result for [Custom Action - presentPaymentSheet] action in Button widget.
+  String? presentMessage;
+
   @override
   void initState(BuildContext context) {}
 

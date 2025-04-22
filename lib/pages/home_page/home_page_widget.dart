@@ -9,6 +9,9 @@ export 'home_page_model.dart';
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({super.key});
 
+  static String routeName = 'HomePage';
+  static String routePath = '/homePage';
+
   @override
   State<HomePageWidget> createState() => _HomePageWidgetState();
 }
@@ -53,31 +56,33 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   letterSpacing: 0.0,
                 ),
           ),
-          actions: const [],
+          actions: [],
           centerTitle: false,
           elevation: 2.0,
         ),
         body: SafeArea(
           top: true,
           child: Align(
-            alignment: const AlignmentDirectional(0.0, 0.0),
+            alignment: AlignmentDirectional(0.0, 0.0),
             child: Column(
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FFButtonWidget(
                   onPressed: () async {
-                    context.pushNamed('Login');
+                    _model.messageInit = await actions.initPaymentSheet(
+                      context,
+                    );
 
-                    await actions.onesignalLogout();
+                    safeSetState(() {});
                   },
-                  text: 'Logout',
+                  text: 'Init Stripe Sheet',
                   options: FFButtonOptions(
                     height: 40.0,
                     padding:
-                        const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
                     iconPadding:
-                        const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
                     color: FlutterFlowTheme.of(context).primary,
                     textStyle: FlutterFlowTheme.of(context).titleSmall.override(
                           fontFamily: 'Inter Tight',
@@ -88,7 +93,52 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                 ),
-              ],
+                FFButtonWidget(
+                  onPressed: () async {
+                    _model.presentMessage = await actions.presentPaymentSheet(
+                      context,
+                    );
+
+                    safeSetState(() {});
+                  },
+                  text: 'Show Stripe Sheet',
+                  options: FFButtonOptions(
+                    height: 40.0,
+                    padding:
+                        EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 16.0, 0.0),
+                    iconPadding:
+                        EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
+                    color: FlutterFlowTheme.of(context).primary,
+                    textStyle: FlutterFlowTheme.of(context).titleSmall.override(
+                          fontFamily: 'Inter Tight',
+                          color: Colors.white,
+                          letterSpacing: 0.0,
+                        ),
+                    elevation: 0.0,
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+                Text(
+                  valueOrDefault<String>(
+                    _model.messageInit,
+                    'n/a',
+                  ),
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Inter',
+                        letterSpacing: 0.0,
+                      ),
+                ),
+                Text(
+                  valueOrDefault<String>(
+                    _model.presentMessage,
+                    '[presentMessage]',
+                  ),
+                  style: FlutterFlowTheme.of(context).bodyMedium.override(
+                        fontFamily: 'Inter',
+                        letterSpacing: 0.0,
+                      ),
+                ),
+              ].divide(SizedBox(height: 16.0)),
             ),
           ),
         ),
